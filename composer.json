@@ -1,0 +1,14 @@
+{
+    "name": "diego/proxy-curl",
+    "description": "Description of project ProxyCurl.",
+    "authors": [
+        {
+            "name": "diego",
+            "email": "diegogonda@recalvi.es"
+        }
+    ],
+    "require": {
+        "php-curl-class/php-curl-class": "^8.6",
+        "catfan/medoo": "^1.7"
+    }
+}
