@@ -2,6 +2,6 @@
 
 namespace proxy\exception;
 
-class ProxyCurlException {
-
+class ProxyCurlException extends \Exception {
+    
 }

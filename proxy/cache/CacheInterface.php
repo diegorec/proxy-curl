@@ -4,15 +4,15 @@ namespace proxy\cache;
 
 interface CacheInterface {
 
-    public function __construct(string $tag, string $expires);
+    public function onInit(Array $params = []);
 
-    public function get();
+    public function get(string $tag);
 
-    public function put($content);
+    public function put(string $tag, $content);
 
-    public function drop();
+    public function drop(string $tag);
 
-    public function exists();
+    public function exists(string $tag);
 
-    public function hasExpired();
+    public function hasExpired(string $tag, string $expires);
 }
