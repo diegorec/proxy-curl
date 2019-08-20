@@ -16,7 +16,7 @@ class NoCache implements CacheInterface {
         return;
     }
 
-    public function hasExpired(string $tag, string $expires) {
+    public function hasExpired(string $tag, string $expires): bool {
         return true;
     }
 
@@ -25,6 +25,26 @@ class NoCache implements CacheInterface {
     }
 
     public function put(string $tag, $content) {
+        return;
+    }
+
+    public function count(): int {
+        return 0;
+    }
+
+    public function flush() {
+        return;
+    }
+
+    public function list(): array {
+        return [];
+    }
+
+    public function pull(string $tag) {
+        return;
+    }
+
+    public function purge(string $expires) {
         return;
     }
 
