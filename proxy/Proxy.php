@@ -4,6 +4,7 @@ namespace proxy;
 
 use \Curl\Curl;
 use proxy\cache\CacheInterface;
+use proxy\utils\CacheStatus;
 
 class Proxy {
 
@@ -21,13 +22,17 @@ class Proxy {
         $this->cache = $cache;
     }
 
-    public function remember(string $url, string $tag, string $expires = "+ 1 second") {
+    public function remember(string $url, string $name, string $expires = "+ 10 year") {
         $content = null;
-        if ($this->checkCache($tag, $expires)) {
-            $content = $this->cache->get($tag);
+        $cachestatus = CacheStatus::check($this->cache, $name, $expires);
+        if ($cachestatus === CacheStatus::OK) {
+            $content = $this->cache->get($name);
         } else {
+            if ($cachestatus === CacheStatus::EXPIRED) {
+                $this->cache->drop($name);
+            }
             $content = $this->call($url);
-            $this->cache->put($tag, $content);
+            $this->cache->put($name, $content);
         }
         return $content;
     }
@@ -38,18 +43,6 @@ class Proxy {
             throw new ProxyExceptions($this->curl->errorMessage, $this->curl->errorCode);
         }
         return $this->curl->response;
-    }
-
-    public function checkCache(string $tag, string $expires): bool {
-        $is = false;
-        if ($this->cache->exists($tag)) {
-            if (!$this->cache->hasExpired($tag, $expires)) {
-                $is = true;
-            } else {
-                $this->cache->drop($tag);
-            }
-        }
-        return $is;
     }
 
 }

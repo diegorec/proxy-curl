@@ -61,11 +61,6 @@ class FileCache implements CacheInterface {
         });
     }
 
-    public function count(): int {
-        $directory = $this->list();
-        return count($directory);
-    }
-
     public function purge(string $expires) {
         $directory = $this->list();
         array_walk($directory, function ($value) use ($expires) {
@@ -73,6 +68,11 @@ class FileCache implements CacheInterface {
                 $this->drop($value);
             }
         });
+    }
+
+    public function count(): int {
+        $directory = $this->list();
+        return count($directory);
     }
 
 }

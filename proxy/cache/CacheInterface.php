@@ -72,14 +72,14 @@ interface CacheInterface {
     public function flush();
 
     /**
-     * Devuelve la cantidad de elementos almacenados en cache
-     * @return int
-     */
-    public function count(): int;
-
-    /**
      * Eliminar de la cache aquellos elementos que han caducado
      * @param string $expires Período en que se condifera caducado
      */
     public function purge(string $expires);
+
+    /**
+     * Devuelve la cantidad de elementos almacenados en cache
+     * @return int
+     */
+    public function count(): int;
 }

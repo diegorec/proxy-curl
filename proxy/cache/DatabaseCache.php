@@ -43,10 +43,10 @@ class DatabaseCache implements CacheInterface {
 
     public function get(string $name) {
         $value = $this->db->get($this->table,
-                ["$this->valueColumn[JSON]"],
+                [$this->valueColumn],
                 [$this->keyColumn => $name]
         );
-        return $value[$this->valueColumn];
+        return json_decode($value[$this->valueColumn]);
     }
 
     public function hasExpired(string $name, string $expires): bool {
@@ -63,7 +63,7 @@ class DatabaseCache implements CacheInterface {
     public function put(string $name, $content) {
         $this->db->insert($this->table, [
             $this->keyColumn => $name,
-            "$this->valueColumn[JSON]" => $content
+            $this->valueColumn => json_encode($content)
         ]);
     }
 
@@ -84,10 +84,6 @@ class DatabaseCache implements CacheInterface {
         $this->db->query("TRUNCATE TABLE $this->table");
     }
 
-    public function count(): int {
-        return $this->db->count($this->table);
-    }
-
     public function purge(string $expires) {
         $directory = $this->list();
         array_walk($directory, function ($value) use ($expires) {
@@ -96,6 +92,10 @@ class DatabaseCache implements CacheInterface {
                 $this->drop($key);
             }
         });
+    }
+
+    public function count(): int {
+        return $this->db->count($this->table);
     }
 
     /**
